@@ -5,6 +5,28 @@
 3. 1-2 까지 됐다면 실제 구현체 뜯어보기. (Linux 의 경우 ROCr (ROCm runtime(ROCR) HSA runtime))
 4. https://github.com/ROCm/rocm-systems 프로젝트 구조 살펴보기. 통합 이후 구조가 복잡해져서 어느 디렉토리에 어떤 내용이 있는지 알 필요가 있음.
 
+```
+projects/
+  amdsmi/
+  aqlprofile/
+  clr/
+  hip/
+  hipother/
+  hip-tests/
+  rccl/
+  rdc/
+  rocm-core
+  rocminfo/
+  rocmsmilib/
+  rocprofiler/
+  rocprofiler-compute/
+  rocprofiler-register/
+  rocprofiler-sdk/
+  rocprofiler-systems/
+  rocrruntime/
+  rocshmem/
+  roctracer/
+```
 
 ---
 
@@ -20,3 +42,35 @@
 
 4. 커널 드라이버는 이 코드를 받아 최종적으로 AMD GPU 하드웨어가 실행할 수 있도록 명령을 내립니다.
 
+
+---
+
+### ROCm Library
+
+https://github.com/ROCm/rocm-libraries
+
+```
+projects/
+  composablekernel/
+  hipblas/
+  hipblas-common/
+  hipblaslt/
+  hipcub/
+  hipfft/
+  hiprand/
+  hipsolver/
+  hipsparse/
+  hipsparselt/
+  miopen/
+  rocblas/
+  rocfft/
+  rocprim/
+  rocrand/
+  rocsolver/
+  rocsparse/
+  rocthrust/
+shared/
+  rocroller/
+  tensile/
+  mxdatagenerator/
+```
