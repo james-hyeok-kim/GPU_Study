@@ -74,3 +74,63 @@ shared/
   tensile/
   mxdatagenerator/
 ```
+
+---
+## ROCm systems
+
+### init
+
+**`clr/rocclr/device/rocm/rocdevice.cpp`**
+
+```
+init()
+  hsa_init()
+    Runtime::Acquire()
+      runtime_singleton_->Load()
+        Runtime::Load()
+          thunkLoader_->Load()
+            여기서 dlsym을 load한다.
+          thunkLoader_->LoadThunkApiTable()
+            여기에 hsakmt api들이 이어져있고, dlsym을 통해 가져온다.
+          thunkLoader_->CreateThunkInstance
+          AMD::Load()
+            **amd_topology.cpp() → Load()**
+              BuildTopology() ←**여기부터 다시 시작!!!**
+                driver->GetNodeProperties()
+                DiscoverCpu()
+                  **runtime_singleton_->RegisterAgent()**
+                DiscoverGpu()
+                  **runtime_singleton_->RegisterAgent()**
+                DiscoverAie()
+                  **runtime_singleton_->RegisterAgent()**
+
+```
+
+BuildTopology()에서 driver에 해당하는 prop을 GetNodeProperties를 통해 얻는다(내부적으로 kmthsa/ioctl). 해당 정보를 통해 DiscoverXpu()에 주고, 이걸 기반으로 agent를 생성한다. agent를 register한다.
+
+
+**`rocr-runtime/runtime/hsa-runtime/core/runtime/hsa.cpp`**
+
+```
+hsa_iterate_agents()
+  Runtime::IterateAgent(**iterateAgentCallback**, nullptr)
+    caller에서 받은 **iterateAgentCallback**을 실행한다.
+  Device::iterateAgentCallback()
+    hsa_agent_get_info()
+      agent→GetInfo()
+getDevices()
+```
+
+### g_devices
+```
+init()
+  new Device()
+  amd::Device::getDevices()
+
+  device->Create()
+  g_devices.push_back(device);
+
+hipGetDeviceProperties()
+  ihipGetDeviceProperties()
+    g_devices에서 Device정보를 가져온다.
+```
